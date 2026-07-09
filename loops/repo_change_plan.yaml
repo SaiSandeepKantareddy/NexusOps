@@ -1,0 +1,16 @@
+id: repo_change_plan
+name: Repository Change Planning Loop
+trigger: cli_goal
+goal: Convert a user goal into an implementation plan with verification and approval points.
+verifier: plan_has_tasks_verification_and_risks
+max_retries: 3
+human_approval_required: true
+preferred_skills:
+  - reader
+  - planner
+  - reviewer
+  - writer
+terminal_states:
+  - completed
+  - needs_approval
+  - blocked

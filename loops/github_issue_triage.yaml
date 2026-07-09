@@ -1,0 +1,15 @@
+id: github_issue_triage
+name: GitHub Issue Triage Loop
+trigger: github_issue_label:nexusops:triage
+goal: Read a GitHub issue, classify it, identify needed skills, and draft a response or plan.
+verifier: issue_summary_has_sources_and_next_action
+max_retries: 2
+human_approval_required: true
+preferred_skills:
+  - reader
+  - planner
+  - writer
+terminal_states:
+  - completed
+  - needs_approval
+  - blocked

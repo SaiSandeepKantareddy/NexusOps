@@ -1,0 +1,9 @@
+name: nexusops
+channels:
+  - defaults
+dependencies:
+  - python=3.12
+  - cryptography
+  - pip
+  - pip:
+      - -e .[dev,observability,server]

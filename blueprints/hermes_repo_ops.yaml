@@ -1,0 +1,24 @@
+id: hermes_repo_ops
+name: Hermes-Inspired Repo Operations Blueprint
+description: A structured specialist chain for repository work, inspired by blueprint-driven agent systems.
+steps:
+  - id: observe
+    agent: reader
+    purpose: Gather repo, issue, docs, and run context.
+    expected_output: Context summary with sources and uncertainty.
+  - id: reason
+    agent: planner
+    purpose: Break the goal into bounded tasks and verification checks.
+    expected_output: Ordered plan with approval gates.
+  - id: act
+    agent: coder
+    purpose: Prepare code or documentation changes in a sandboxed workspace.
+    expected_output: Proposed diff or artifact.
+  - id: evaluate
+    agent: reviewer
+    purpose: Validate safety, scope, tests, and policy.
+    expected_output: Pass, retry, blocked, or needs approval.
+  - id: report
+    agent: writer
+    purpose: Produce the final run report or PR body.
+    expected_output: Human-readable summary with trace references.
