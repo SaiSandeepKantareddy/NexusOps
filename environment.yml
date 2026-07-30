@@ -6,4 +6,4 @@ dependencies:
   - cryptography
   - pip
   - pip:
-      - -e .[dev,observability,server]
+      - -e .[dev,agents,github,mcp,observability,server,storage]

@@ -1,85 +1,119 @@
 # NexusOps
 
-NexusOps is a GitHub-native multi-agent runtime for learning and demonstrating modern agent engineering.
+NexusOps is an early-stage learning project for building a GitHub-native agent runtime.
 
-It is not a chatbot. It is a small, inspectable agent operating system:
+The goal is to make modern AI engineering patterns visible and approachable: skill-based agents, loop engineering, MCP-ready tool access, human approval, evaluation gates, and traceable runs.
 
-- **Loop engineering**: reusable loops with triggers, goals, verifiers, retry limits, and stopping rules.
-- **Skill-based scaling**: OpenClaw-style `SKILL.md` capabilities loaded dynamically from `skills/`.
-- **Hermes-inspired blueprints**: structured specialist workflows in `blueprints/`.
-- **MCP-ready tools**: designed around standard tool/data access rather than one-off integrations.
-- **Human-governed autonomy**: agents can propose and prepare; risky actions require approval.
-- **Observable runs**: every run produces a traceable JSON report.
+It is intentionally small right now. The first version focuses on the runtime skeleton before adding real tool execution.
 
-## Why Build This?
+## Current Status
 
-The shift in engineering is from:
+**Works today**
+
+- Loads dynamic `SKILL.md` files from `skills/`
+- Loads loop specs from `loops/*.yaml`
+- Loads workflow blueprints from `blueprints/*.yaml`
+- Selects relevant skills for a goal
+- Produces a JSON run report
+- Provides a small CLI for exploring the runtime
+- Includes tests and linting
+
+**Planned next**
+
+- Model-backed routing and planning
+- MCP filesystem and GitHub tools
+- Human approval queue
+- Evaluator checks
+- GitHub issue-to-draft-PR workflow
+- Phoenix/OpenTelemetry run traces
+- Optional dashboard
+
+## Why This Exists
+
+Most AI coding starts like this:
 
 ```text
 prompt -> response
 ```
 
-to:
+Useful agent systems need more structure:
 
 ```text
-runtime -> skills -> tools -> memory -> loops -> verification -> traces -> approval -> artifacts
+goal -> context -> skills -> tools -> loop -> verification -> approval -> artifact
 ```
 
-NexusOps is a learning project for that second world.
+NexusOps is a reference project for learning that second pattern.
 
-## Model Setup
+## Architecture Sketch
 
-Create a `.env` file:
-
-```env
-OPENAI_BASE_URL=https://azure.agentslab.host/v1
-OPENAI_API_KEY=your_key_here
-
-NEXUSOPS_DEFAULT_MODEL=Kimi-K2.6
-NEXUSOPS_FAST_MODEL=gpt-5.4-mini
-NEXUSOPS_ROUTER_MODEL=grok-4-fast-non-reasoning
-NEXUSOPS_EMBEDDING_MODEL=text-embedding-3-small
+```text
+CLI Goal / GitHub Issue
+        |
+        v
+Nexus Runtime
+        |
+        +--> Skill Registry       skills/*/SKILL.md
+        +--> Loop Registry        loops/*.yaml
+        +--> Blueprint Registry   blueprints/*.yaml
+        +--> Model Provider       OpenAI-compatible APIs
+        +--> Tool Layer           MCP / GitHub / filesystem
+        +--> Evaluator Gates      tests / schemas / review
+        |
+        v
+Run Report / Draft Plan / Future PR
 ```
 
-## First Commands
+## Quick Start
+
+NexusOps targets Python 3.12+.
 
 ```bash
-conda create -n nexusops python=3.12 -y
+conda env create -f environment.yml
 conda activate nexusops
-conda install cryptography -y
-pip install -e ".[dev,observability,server]"
+cp .env.example .env
 nexus doctor
 nexus skills list
 nexus loops list
 nexus run "Draft a plan to add GitHub issue triage automation"
 ```
 
-NexusOps targets Python 3.12+. The MCP packages are part of the main install. Server/dashboard dependencies are optional:
+For a lightweight core install:
 
 ```bash
-pip install -e ".[server]"
+python -m pip install -e ".[dev]"
 ```
 
-For the full local development environment used by this repo:
+For the full development stack:
 
 ```bash
-conda env create -f environment.yml
-conda activate nexusops
+python -m pip install -e ".[dev,agents,github,mcp,observability,server,storage]"
 ```
 
-When running tests in the full environment, disable third-party pytest plugin autoload so optional observability packages do not start services during unit tests:
+When running tests with the full observability stack, disable third-party pytest plugin autoload so optional services do not start during unit tests:
 
 ```bash
 PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 pytest
 ```
 
-Phoenix should store state inside the repo:
+Phoenix should store state inside the project:
 
 ```bash
 export PHOENIX_WORKING_DIR=runs/phoenix
 ```
 
-The first V1 runtime is intentionally conservative: it loads skills, selects relevant capabilities, records the loop context, and writes a run report. Tool execution, GitHub PR creation, MCP servers, and sandboxed coding arrive as explicit milestones.
+## Example Output
+
+```text
+Run: 0404bed7-9e59-4567-8c37-edd432a77e60
+Goal: Draft a plan to add GitHub issue triage automation
+Loop: GitHub Issue Triage Loop (github_issue_triage)
+Selected skills: planner, reader, writer
+- Loaded dynamic skills from SKILL.md files.
+- Selected loop specification with verifier and terminal states.
+- Selected Hermes-inspired blueprint.
+- V1 is planning-only: tool execution and PR creation require later approval gates.
+Saved run report: runs/0404bed7-9e59-4567-8c37-edd432a77e60.json
+```
 
 ## Project Layout
 
@@ -87,20 +121,39 @@ The first V1 runtime is intentionally conservative: it loads skills, selects rel
 src/nexusops/        Python package and CLI
 skills/              Dynamic agent capabilities
 loops/               Loop engineering specs
-blueprints/          Hermes-inspired workflow blueprints
-docs/                Architecture and learning notes
-runs/                Local run reports, ignored by git
+blueprints/          Workflow blueprints
+docs/                Architecture and spec notes
+examples/            Guided examples
 tests/               Unit tests for loaders and runtime basics
 ```
 
+## Documentation
+
+- [Architecture](docs/architecture.md)
+- [Package Map](docs/package-map.md)
+- [Skill Spec](docs/skill-spec.md)
+- [Loop Spec](docs/loop-spec.md)
+- [Public Roadmap](docs/public-roadmap.md)
+- [First Run Example](examples/first-run.md)
+- [Skill Authoring Example](examples/skill-authoring.md)
+
 ## Roadmap
 
-1. CLI, config, skill registry, loop registry, run reports.
-2. Hosted model calls through OpenAI-compatible endpoint.
-3. Semantic skill routing using embeddings.
-4. MCP filesystem and GitHub tools.
-5. Planner, coder, tester, reviewer handoffs.
-6. Human approval queue.
-7. Phoenix/OpenTelemetry traces.
-8. GitHub issue-to-draft-PR workflow.
-9. Dashboard for runs, skills, traces, costs, and approvals.
+```text
+M0: Runtime skeleton
+M1: Model-backed router
+M2: MCP filesystem tool
+M3: GitHub issue reader
+M4: Human approval queue
+M5: Issue-to-draft-PR demo
+```
+
+## Safety
+
+NexusOps is designed around governed autonomy. The project should prefer proposing, reviewing, and approving work before taking risky actions such as writing files, installing packages, pushing commits, opening pull requests, or using secrets.
+
+See [SECURITY.md](SECURITY.md).
+
+## License
+
+MIT. See [LICENSE](LICENSE).

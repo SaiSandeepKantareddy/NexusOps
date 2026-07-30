@@ -1,0 +1,15 @@
+---
+name: Feature request
+about: Suggest a new capability or improvement
+title: "feature: "
+labels: enhancement
+assignees: ""
+---
+
+## Problem
+
+## Proposed solution
+
+## Alternatives considered
+
+## Safety or approval considerations
