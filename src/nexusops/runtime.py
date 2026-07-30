@@ -26,12 +26,18 @@ class NexusRuntime:
         selected = preferred or select_skills(goal, skills)
         blueprint = blueprints[0] if blueprints else None
 
+        selection_reason = (
+            f"Preferred skills from loop '{loop.id}' were used."
+            if preferred and loop
+            else "Skills were selected with lightweight keyword matching."
+        )
         notes = [
             "Loaded dynamic skills from SKILL.md files.",
             "Selected loop specification with verifier and terminal states."
             if loop
             else "No loop specification found; using direct planning mode.",
-            "Selected Hermes-inspired blueprint." if blueprint else "No blueprint found.",
+            selection_reason,
+            "Selected workflow blueprint." if blueprint else "No blueprint found.",
             "V1 is planning-only: tool execution and PR creation require later approval gates.",
         ]
 
@@ -48,7 +54,14 @@ class NexusRuntime:
                     "fast": self.settings.fast_model,
                     "router": self.settings.router_model,
                     "embedding": self.settings.embedding_model,
-                }
+                },
+                "selected_skill_ids": [skill.id for skill in selected],
+                "selection_reason": selection_reason,
+                "loaded_counts": {
+                    "skills": len(skills),
+                    "loops": len(loops),
+                    "blueprints": len(blueprints),
+                },
             },
         )
 

@@ -1,6 +1,7 @@
 from pathlib import Path
 
 from nexusops.loops import load_loops
+from nexusops.reports import list_report_paths, load_report
 from nexusops.skills import load_skills, select_skills
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -22,3 +23,13 @@ def test_select_skills() -> None:
 def test_load_loops() -> None:
     loops = load_loops(ROOT / "loops")
     assert {loop.id for loop in loops} >= {"github_issue_triage", "repo_change_plan"}
+
+
+def test_report_listing(tmp_path: Path) -> None:
+    source = ROOT / "runs"
+    assert list_report_paths(tmp_path) == []
+    if source.exists():
+        for path in list_report_paths(source):
+            report = load_report(path)
+            assert report.id
+            break

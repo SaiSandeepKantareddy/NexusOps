@@ -72,9 +72,11 @@ conda env create -f environment.yml
 conda activate nexusops
 cp .env.example .env
 nexus doctor
+nexus demo
 nexus skills list
 nexus loops list
 nexus run "Draft a plan to add GitHub issue triage automation"
+nexus runs list
 ```
 
 For a lightweight core install:
@@ -104,13 +106,18 @@ export PHOENIX_WORKING_DIR=runs/phoenix
 ## Example Output
 
 ```text
+NexusOps Demo
+This offline demo loads skills, loops, and blueprints, selects a workflow, and writes a traceable run report. No model call or API key is required.
+
 Run: 0404bed7-9e59-4567-8c37-edd432a77e60
 Goal: Draft a plan to add GitHub issue triage automation
 Loop: GitHub Issue Triage Loop (github_issue_triage)
+Blueprint: Hermes-Inspired Repo Operations Blueprint (hermes_repo_ops)
 Selected skills: planner, reader, writer
 - Loaded dynamic skills from SKILL.md files.
 - Selected loop specification with verifier and terminal states.
-- Selected Hermes-inspired blueprint.
+- Preferred skills from loop 'github_issue_triage' were used.
+- Selected workflow blueprint.
 - V1 is planning-only: tool execution and PR creation require later approval gates.
 Saved run report: runs/0404bed7-9e59-4567-8c37-edd432a77e60.json
 ```

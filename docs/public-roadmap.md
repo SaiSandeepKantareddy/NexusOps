@@ -11,6 +11,8 @@ Status: current
 - skill registry
 - loop registry
 - blueprint registry
+- offline demo
+- run listing and inspection
 - JSON run reports
 - tests and linting
 
