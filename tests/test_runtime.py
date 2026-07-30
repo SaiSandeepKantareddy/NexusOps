@@ -1,7 +1,7 @@
 from pathlib import Path
+
 from nexusops.runtime import NexusRuntime
 from nexusops.settings import Settings
-
 
 ROOT = Path(__file__).resolve().parents[1]
 

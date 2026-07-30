@@ -1,7 +1,7 @@
 from pathlib import Path
+
 from nexusops.loops import load_loops
 from nexusops.skills import load_skills, select_skills
-
 
 ROOT = Path(__file__).resolve().parents[1]
 
