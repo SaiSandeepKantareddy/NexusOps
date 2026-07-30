@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Optional
 
 import yaml
 
@@ -21,7 +20,7 @@ def load_loops(loops_dir: Path) -> list[LoopSpec]:
     return [load_loop(path) for path in sorted(loops_dir.glob("*.yaml"))]
 
 
-def choose_loop(goal: str, loops: list[LoopSpec]) -> Optional[LoopSpec]:
+def choose_loop(goal: str, loops: list[LoopSpec]) -> LoopSpec | None:
     if not loops:
         return None
     goal_lower = goal.lower()

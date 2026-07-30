@@ -50,7 +50,7 @@ def select_skills(goal: str, skills: list[Skill], limit: int = 3) -> list[Skill]
     goal_terms = {term.strip(".,:;!?()[]{}").lower() for term in goal.split()}
     scored: list[tuple[int, Skill]] = []
     for skill in skills:
-        haystack = " ".join([skill.id, skill.name, skill.description, skill.category]).lower()
+        haystack = f"{skill.id} {skill.name} {skill.description} {skill.category}".lower()
         score = sum(1 for term in goal_terms if term and term in haystack)
         scored.append((score, skill))
 

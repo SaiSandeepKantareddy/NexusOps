@@ -1,8 +1,8 @@
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
-from typing import Any, Literal, Optional
+from typing import Any, Literal
 
 from pydantic import BaseModel, Field
 
@@ -47,11 +47,11 @@ class Blueprint(BaseModel):
 
 class RunReport(BaseModel):
     id: str
-    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    created_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
     goal: str
-    loop: Optional[LoopSpec] = None
+    loop: LoopSpec | None = None
     selected_skills: list[Skill] = Field(default_factory=list)
-    blueprint: Optional[Blueprint] = None
+    blueprint: Blueprint | None = None
     status: Literal["planned", "completed", "blocked", "needs_approval"] = "planned"
     notes: list[str] = Field(default_factory=list)
     artifacts: dict[str, Any] = Field(default_factory=dict)
