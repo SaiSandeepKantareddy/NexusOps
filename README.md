@@ -67,9 +67,12 @@ Run Report / Draft Plan / Future PR
 
 NexusOps targets Python 3.12+.
 
+Start with the lightweight learning environment. It installs the core CLI, tests,
+and linting tools only.
+
 ```bash
-conda env create -f environment.yml
-conda activate nexusops
+conda env create -f environment-lite.yml
+conda activate nexusops-lite
 cp .env.example .env
 nexus doctor
 nexus demo
@@ -79,19 +82,28 @@ nexus run "Draft a plan to add GitHub issue triage automation"
 nexus runs list
 ```
 
-For a lightweight core install:
+If you already have Python 3.12 active, the equivalent pip install is:
 
 ```bash
 python -m pip install -e ".[dev]"
 ```
 
-For the full development stack:
+For the full experimental stack with model clients, MCP, GitHub, observability,
+server, and storage dependencies:
+
+```bash
+conda env create -f environment.yml
+conda activate nexusops
+```
+
+Or install the full extras into an existing environment:
 
 ```bash
 python -m pip install -e ".[dev,agents,github,mcp,observability,server,storage]"
 ```
 
-When running tests with the full observability stack, disable third-party pytest plugin autoload so optional services do not start during unit tests:
+When running tests with the full observability stack, disable third-party pytest
+plugin autoload so optional services do not start during unit tests:
 
 ```bash
 PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 pytest
@@ -132,6 +144,8 @@ blueprints/          Workflow blueprints
 docs/                Architecture and spec notes
 examples/            Guided examples
 tests/               Unit tests for loaders and runtime basics
+environment-lite.yml Lightweight first-run environment
+environment.yml      Full experimental development environment
 ```
 
 ## Documentation

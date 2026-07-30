@@ -1,6 +1,14 @@
 # First Run
 
-After setup, run:
+Create the lightweight learning environment first:
+
+```bash
+conda env create -f environment-lite.yml
+conda activate nexusops-lite
+cp .env.example .env
+```
+
+Then run:
 
 ```bash
 nexus doctor

@@ -77,6 +77,10 @@ packages = ["src/nexusops"]
 [tool.ruff]
 line-length = 100
 target-version = "py312"
+exclude = [
+  ".conda",
+  ".venv",
+]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
